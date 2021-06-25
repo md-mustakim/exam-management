@@ -3,35 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teacher;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TeacherController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        return view('');
+        return view('teacher.index');
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
-        //
+        return view('teacher.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -41,8 +46,8 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
+     * @param Teacher $teacher
+     * @return Response
      */
     public function show(Teacher $teacher)
     {
@@ -52,8 +57,8 @@ class TeacherController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
+     * @param Teacher $teacher
+     * @return Response
      */
     public function edit(Teacher $teacher)
     {
@@ -63,9 +68,9 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Teacher $teacher
+     * @return Response
      */
     public function update(Request $request, Teacher $teacher)
     {
@@ -75,11 +80,25 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
+     * @param Teacher $teacher
+     * @return RedirectResponse
      */
-    public function destroy(Teacher $teacher)
+    public function destroy(Teacher $teacher): RedirectResponse
     {
-        //
+        return back()->with('message', 'Delete Success');
+    }
+
+
+    public function login(Request $request)
+    {
+
+    }
+    public function register(Request $request)
+    {
+
+    }
+    public function dashboard(Request $request)
+    {
+
     }
 }

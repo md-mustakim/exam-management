@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+//Auth::routes();
+Route::prefix('panel')->name('panel.')->group(function (){
+    Route::get('auth/login', [TeacherController::class, 'login'])->name('auth.create');
+    Route::get('auth/register', [TeacherController::class, 'register'])->name('auth.create');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::post('auth/login', [TeacherController::class, 'login'])->name('auth.login');
+    Route::post('auth/register', [TeacherController::class, 'register'])->name('auth.register');
 
-Route::get("/test", function (){
-    return view("admin.adminDashboard");
+    Route::get('dashboard', [TeacherController::class, 'dashboard'])->name('dashboard');
+    Route::resource('/teacher', TeacherController::class);
 });
