@@ -19,14 +19,15 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="{{ route('teacher.dashboard') }}" class="h1"><b>Admin</b>LTE</a>
+            <a href="{{ route('panel.dashboard') }}" class="h1"><b>Admin</b>LTE</a>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
 
             <form action="{{ route('panel.auth.login') }}" method="post">
+                @csrf
                 <div class="input-group mb-3">
-                    <input type="email" class="form-control" placeholder="Email">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -34,7 +35,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="password"  id="password"  name="password" class="form-control" placeholder="Password">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>

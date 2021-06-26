@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
@@ -19,7 +20,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('teacher.index');
+        return view('teacher.index', ['teachers' =>Teacher::all()]);
     }
 
     /**
@@ -40,7 +41,16 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attributes = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:teachers,email',
+            'phone' => 'required|unique:teachers,phone',
+            'designation' => 'nullable',
+            'password' => 'required'
+        ]);
+
+        Teacher::created($attributes);
+        return redirect()->route('panel.teacher.index')->with('message', 'Update Success');
     }
 
     /**
@@ -51,7 +61,7 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher)
     {
-        //
+        return view('teacher.show', ['teacher' => $teacher]);
     }
 
     /**
@@ -62,7 +72,7 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
-        //
+        return view('teacher.edit', ['teacher' => $teacher]);
     }
 
     /**
@@ -74,7 +84,17 @@ class TeacherController extends Controller
      */
     public function update(Request $request, Teacher $teacher)
     {
-        //
+        $attributes = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:teachers,email,'. $teacher->id,
+            'phone' => 'required|unique:teachers,phone,'. $teacher->id,
+            'designation' => 'nullable',
+            'password' => 'required'
+        ]);
+
+        $teacher->update($attributes);
+
+        return back()->with('message', 'Update Success');
     }
 
     /**
@@ -88,17 +108,27 @@ class TeacherController extends Controller
         return back()->with('message', 'Delete Success');
     }
 
+    public function showLoginForm(){
+        return view("teacher.auth.login");
+    }
+
 
     public function login(Request $request)
     {
+        $attributes = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
+        if(Auth::guard('admin')->attempt($attributes))
+        {
+            return redirect()->intended();
+        }
+        return back()->with('message', 'invalid email or password');
     }
-    public function register(Request $request)
-    {
 
-    }
     public function dashboard(Request $request)
     {
-
+        return view('teacher.teacherDashboard');
     }
 }

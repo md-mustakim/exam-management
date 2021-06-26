@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 //Auth::routes();
 Route::prefix('panel')->name('panel.')->group(function (){
-    Route::get('auth/login', [TeacherController::class, 'login'])->name('auth.create');
+    Route::get('auth/login', [TeacherController::class, 'showLoginForm'])->name('auth.login.show');
     Route::get('auth/register', [TeacherController::class, 'register'])->name('auth.create');
 
     Route::post('auth/login', [TeacherController::class, 'login'])->name('auth.login');
