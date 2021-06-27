@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class PanelCourse extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'panel_id',
+        'teacher_id',
+        'name',
+        'file',
+        'description'
+    ];
 }

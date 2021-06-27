@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Panel;
+use App\Models\PanelCourse;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -65,7 +66,8 @@ class PanelController extends Controller
      */
     public function show(Panel $panel)
     {
-        return view('teacher.panel.show', compact('panel'));
+        $courses = PanelCourse::all()->where('panel_id', '=', $panel->id);
+        return view('teacher.panel.show', ['panel' => $panel, 'courses' => $courses]);
     }
 
     /**
