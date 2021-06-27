@@ -19,7 +19,7 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="{{ route('panel.dashboard') }}" class="h1"><b>Teacher</b></a>
+            <a href="{{ route('admin.dashboard') }}" class="h1"><b>Admin</b></a>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
@@ -36,7 +36,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('panel.auth.login') }}" method="post">
+            <form action="{{ route('admin.login.action') }}" method="post">
                 @csrf
                 <div class="input-group mb-3">
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email">
@@ -62,6 +62,7 @@
                                 Remember Me
                             </label>
                         </div>
+                        <a href="{{ route('panel.auth.login.show') }}" class="">Teacher?</a>
                     </div>
                     <!-- /.col -->
                     <div class="col-4">

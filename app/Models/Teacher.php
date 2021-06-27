@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @method static create(array $attributes)
+ */
 class Teacher extends Authenticatable
 {
     use HasFactory, Notifiable;

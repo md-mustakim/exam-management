@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class TeacherController extends Controller
 {
@@ -37,9 +38,9 @@ class TeacherController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $attributes = $request->validate([
             'name' => 'required',
@@ -48,8 +49,9 @@ class TeacherController extends Controller
             'designation' => 'nullable',
             'password' => 'required'
         ]);
+        $attributes['password'] = Hash::make($request->input('password'));
 
-        Teacher::created($attributes);
+        Teacher::create($attributes);
         return redirect()->route('panel.teacher.index')->with('message', 'Update Success');
     }
 
@@ -57,7 +59,7 @@ class TeacherController extends Controller
      * Display the specified resource.
      *
      * @param Teacher $teacher
-     * @return Response
+     * @return Application|Factory|View
      */
     public function show(Teacher $teacher)
     {
@@ -68,7 +70,7 @@ class TeacherController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param Teacher $teacher
-     * @return Response
+     * @return Application|Factory|View
      */
     public function edit(Teacher $teacher)
     {
@@ -80,9 +82,9 @@ class TeacherController extends Controller
      *
      * @param Request $request
      * @param Teacher $teacher
-     * @return Response
+     * @return RedirectResponse
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(Request $request, Teacher $teacher): RedirectResponse
     {
         $attributes = $request->validate([
             'name' => 'required',
@@ -113,16 +115,16 @@ class TeacherController extends Controller
     }
 
 
-    public function login(Request $request)
+    public function login(Request $request): RedirectResponse
     {
         $attributes = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        if(Auth::guard('admin')->attempt($attributes))
+        if(Auth::guard('teacher')->attempt($attributes))
         {
-            return redirect()->intended();
+            return redirect()->route("panel.dashboard");
         }
         return back()->with('message', 'invalid email or password');
     }
