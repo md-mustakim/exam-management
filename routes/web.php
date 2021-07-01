@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\PanelCourseController;
+use App\Http\Controllers\PanelMemberController;
 use App\Http\Controllers\TeacherController;
+use App\Models\PanelCourse;
+use App\Models\PanelMember;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +32,15 @@ Route::prefix('panel')->name('panel.')->group(function (){
 
     Route::get('dashboard', [TeacherController::class, 'dashboard'])->name('dashboard');
     Route::resource('/teacher', TeacherController::class);
+    Route::post('panelCourse/store/{panel}', [PanelCourseController::class, 'store'])->name('panelCourse.store');
+    Route::get('download/file/{panelCourse}', [PanelCourseController::class, 'downloadFile'])->name('panelCourse.download');
+    Route::get('delete/file/{panelCourse}', [PanelCourseController::class, 'destroy'])->name('panelCourse.destroy');
 
+    // add member route
+    Route::get('member/addMember/{panel}', [PanelMemberController::class, 'create'])->name('add.member');
+    Route::post('member/{panel}', [PanelMemberController::class, 'store'])
+        ->name('member.store');
+    Route::get('teacher/show/{teacher}', [TeacherController::class, 'show'])->name('teacher.show');
 
 });
 
@@ -49,5 +61,8 @@ Route::prefix('admin')->group(function (){
     Route::get('teacher', [TeacherController::class, 'index'])->name('admin.teacher.index');
 
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    Route::get('panel', [AdminController::class, 'panelIndex'])->name('admin.panel.index');
+    Route::get('panel/show/{panel}', [AdminController::class, 'panelShow'])->name('admin.panel.show');
 
 });

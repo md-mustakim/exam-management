@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Panel;
+use App\Models\PanelCourse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+
 
 class AdminController extends Controller
 {
@@ -95,7 +98,7 @@ class AdminController extends Controller
     {
         return view("admin.auth.login");
     }
-    public function loginAction(Request $request)
+    public function loginAction(Request $request): RedirectResponse
     {
         $attributes = $request->validate([
             'email' => 'required',
@@ -103,7 +106,7 @@ class AdminController extends Controller
         ]);
         if (Auth::guard('admin')->attempt($attributes))
         {
-            return view('admin.adminDashboard');
+            return redirect()->route('admin.dashboard');
         }
         return back()->with('message', 'Invalid Login');
     }
@@ -111,11 +114,24 @@ class AdminController extends Controller
     public function logout(): RedirectResponse
     {
         Auth::guard('admin')->logout();
-        return redirect()->route('admin.login.show');
+        return redirect()->route('panel.login.show');
     }
 
     public function dashboard()
     {
         return view('admin.adminDashboard');
+    }
+
+    public function panelIndex()
+    {
+        return view('admin.panel.index', ['panels' => Panel::all()]);
+    }
+
+    public function panelShow(Panel $panel){
+        $data = [
+            'panel' =>  $panel,
+            'courses' => PanelCourse::all()->where('panel_id', '=', $panel->id)
+        ];
+        return view('admin.panel.show', $data);
     }
 }

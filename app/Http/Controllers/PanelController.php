@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Panel;
 use App\Models\PanelCourse;
+use App\Models\PanelMember;
+use App\Models\Teacher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -67,7 +69,12 @@ class PanelController extends Controller
     public function show(Panel $panel)
     {
         $courses = PanelCourse::all()->where('panel_id', '=', $panel->id);
-        return view('teacher.panel.show', ['panel' => $panel, 'courses' => $courses]);
+        $members = PanelMember::all()->where('panel_id', '=', $panel->id);
+        return view('teacher.panel.show', [
+            'panel' => $panel,
+            'courses' => $courses,
+            'members' => $members
+        ]);
     }
 
     /**

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @method static create(array $attributes)
+ * @method static findOrFail(mixed $teacher_id)
  */
 class Teacher extends Authenticatable
 {

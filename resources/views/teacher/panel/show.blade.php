@@ -2,24 +2,52 @@
 
 @section('main_content')
     <div class="">
-        <table class="table table-bordered">
-            <tr>
-                <th>Name</th>
-                <th>{{ $panel->name }} [{{ $panel->code }}]</th>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <th>{{ $panel->description }}</th>
-            </tr>
-            <tr>
-                <th>Member</th>
-                <th>{{ $panel->member->count() }}</th>
-            </tr>
-            <tr>
-                <th>File</th>
-                <th>{{ $panel->course->count() }}</th>
-            </tr>
-        </table>
+        <div class="row m-0 p-0">
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Name</th>
+                        <th>{{ $panel->name }} [{{ $panel->code }}]</th>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <th>{{ $panel->description }}</th>
+                    </tr>
+                    <tr>
+                        <th>Member</th>
+                        <th>
+                            {{ $panel->member->count() }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>File</th>
+                        <th>{{ $panel->course->count() }}</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between align-items-center bg-light my-2">
+                    <div class="h3 font-weight-bold">
+                        Member List
+                    </div>
+                    <a href="{{ route('panel.add.member', $panel->id) }}" class="">
+                        <i class="fa fa-user-plus"></i>
+                    </a>
+                </div>
+                <table class="table table-bordered">
+                    @foreach($members as $member)
+                        <tr>
+                            <td>
+                                <a href="{{ route('panel.teacher.show', $member->teacher->id) }}" class="">
+                                    {{ $member->teacher->name }}
+                                </a>
+                            </td>
+                            <td>{{ $member->teacher->id }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
         <div class="row">
            <div class="col-md-6">
                <div class="card card-primary">
@@ -28,7 +56,24 @@
                    </div>
                    <!-- /.card-header -->
                    <!-- form start -->
-                   <form method="post" action="" enctype="multipart/form-data">
+                   <div class="">
+                       @if(Session::has('message'))
+                        <div class="alert alert-success">
+                            {{ Session::get('message') }}
+                        </div>
+                       @endif
+                       @if ($errors->any())
+                           <div class="alert alert-danger">
+                               <ul>
+                                   @foreach ($errors->all() as $error)
+                                       <li>{{ $error }}</li>
+                                   @endforeach
+                               </ul>
+                           </div>
+                       @endif
+                   </div>
+                   <form method="post" action="{{ route('panel.panelCourse.store',$panel->id) }}" enctype="multipart/form-data">
+                       @csrf
                        <div class="card-body">
                            <div class="form-group">
                                <label for="name">Name</label>
@@ -36,7 +81,7 @@
                            </div>
                            <div class="form-group">
                                <label for="description">description</label>
-                               <input type="password" class="form-control" id="description"  name="description" placeholder="description">
+                               <input type="text" class="form-control" id="description"  name="description" placeholder="description">
                            </div>
                            <div class="form-group">
                                <label for="file">File input</label>
@@ -65,19 +110,45 @@
            </div>
            <div class="col-md-6">
                <table class="table table-bordered">
+                   <thead>
+                   <tr>
+                       <th>#</th>
+                       <th>Name</th>
+                       <th>Description</th>
+                       <th>Upload By</th>
+                       <th colspan="2">Action</th>
+                   </tr>
+                   </thead>
+                   <tbody>
                    @if($courses->count() >0)
+                       @php
+                           $count = 0;
+                       @endphp
                        @foreach($courses as $course)
+                           @php $count++; @endphp
                            <tr>
+                               <td>{{ $count }}</td>
                                <td>{{ $course->name }}</td>
                                <td>{{ $course->description }}</td>
-                               <td>{{ $course->file }}</td>
+                               <td>{{ $course->teacher->name }}</td>
+                               <td>
+                                   <a href="{{ route('panel.panelCourse.download', $course->id) }}" class="">
+                                       <i class="fa fa-download"></i>
+                                   </a>
+                               </td>
+                               <td>
+                                   <a href="{{ route('panel.panelCourse.destroy',  $course->id) }}" class="">
+                                       <i class="fa fa-trash"></i>
+                                   </a>
+                               </td>
                            </tr>
                        @endforeach
                    @else
                        <tr>
-                           <td>No Course Found</td>
+                           <td colspan="5">No Course Found</td>
                        </tr>
                    @endif
+                   </tbody>
                </table>
            </div>
         </div>

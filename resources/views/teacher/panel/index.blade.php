@@ -16,6 +16,8 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Code</th>
+                <th>Members</th>
+                <th>Course</th>
                 <th>Description</th>
             </tr>
             </thead>
@@ -30,6 +32,8 @@
                             </a>
                         </td>
                         <td>{{ $panel->code }}</td>
+                        <td>{{ $panel->member->count() }}</td>
+                        <td>{{ $panel->course->count() }}</td>
                         <td>{{ $panel->description }}</td>
 
                     </tr>
