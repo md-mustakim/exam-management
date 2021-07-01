@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FileVerifyController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PanelCourseController;
 use App\Http\Controllers\PanelMemberController;
@@ -42,12 +43,15 @@ Route::prefix('panel')->name('panel.')->group(function (){
         ->name('member.store');
     Route::get('teacher/show/{teacher}', [TeacherController::class, 'show'])->name('teacher.show');
 
+    Route::get('panel/courseVerify/{panel}/{panelCourse}', [FileVerifyController::class, 'create'])->name('file.verify.create');
+    Route::post('course/verify/{panel}', [FileVerifyController::class, 'store'])->name('file.verify.store');
+
 });
 
 Route::resource('panel', PanelController::class);
 
 Route::prefix('admin')->group(function (){
-    Route::get('login', [AdminController::class, 'showLogin'])->name('admin.login.show');
+
     Route::get('login', [AdminController::class, 'showLogin'])->name('login.show');
     Route::post('login', [AdminController::class, 'loginAction'])->name('admin.login.action');
 
@@ -64,5 +68,6 @@ Route::prefix('admin')->group(function (){
 
     Route::get('panel', [AdminController::class, 'panelIndex'])->name('admin.panel.index');
     Route::get('panel/show/{panel}', [AdminController::class, 'panelShow'])->name('admin.panel.show');
+
 
 });

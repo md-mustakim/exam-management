@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileVerify;
 use App\Models\Panel;
 use App\Models\PanelCourse;
 use App\Models\PanelMember;
@@ -60,6 +61,29 @@ class PanelController extends Controller
         return redirect()->route('panel.index');
     }
 
+    public function courseDetails(): object
+    {
+        $courseWithVote = PanelCourse::with('verifyBy')->get();
+        $result = array();
+        foreach ($courseWithVote as $single)
+        {
+            $id = Auth::guard('teacher')->id();
+            $single = (array)$single;
+            $resultSearch = array_search($id, $single);
+            if ($resultSearch === false)
+            {
+                $single['status'] = false;
+            }
+            else
+            {
+                $single['status'] = true;
+            }
+            array_push($result,$single);
+        }
+        return (object)$result;
+
+    }
+
     /**
      * Display the specified resource.
      *
@@ -69,11 +93,33 @@ class PanelController extends Controller
     public function show(Panel $panel)
     {
         $courses = PanelCourse::all()->where('panel_id', '=', $panel->id);
+
         $members = PanelMember::all()->where('panel_id', '=', $panel->id);
+        $verifiedFileMemberList = FileVerify::all()
+            ->where('panel_id', '=', $panel->id)
+        ->where('panel_course', '=', );
+
+        $teacherList = array();
+        foreach ($verifiedFileMemberList as $teacher)
+        {
+            array_push($teacherList, $teacher->teacher_id);
+        }
+        //return $verifiedFileMemberList;
+        $searchResult = array_search(Auth::guard('teacher')->id(), $teacherList);
+        $verifiedStatus =true;
+        if ($searchResult === false)
+        {
+            $verifiedStatus = false;
+        }else{
+            $verifiedStatus = true;
+        }
+
         return view('teacher.panel.show', [
             'panel' => $panel,
             'courses' => $courses,
-            'members' => $members
+            'c' => $this->courseDetails(),
+            'members' => $members,
+            'verifiedStatus' => $verifiedStatus
         ]);
     }
 

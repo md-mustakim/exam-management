@@ -1,5 +1,19 @@
 @extends('layouts.theme')
 
+@section('page_title')
+    Panel {{ $panel->name }}
+@endsection
+
+@section('page_index')
+    <li class="breadcrumb-item">
+        <a href="{{ route('panel.dashboard') }}">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{{ route('panel.index') }}">Panel List</a>
+    </li>
+    <li class="breadcrumb-item active">Panel</li>
+@endsection
+
 @section('main_content')
     <div class="">
         <div class="row m-0 p-0">
@@ -49,13 +63,11 @@
             </div>
         </div>
         <div class="row">
-           <div class="col-md-6">
+           <div class="col-md-4">
                <div class="card card-primary">
                    <div class="card-header">
                        <h3 class="card-title">Upload Result File</h3>
                    </div>
-                   <!-- /.card-header -->
-                   <!-- form start -->
                    <div class="">
                        @if(Session::has('message'))
                         <div class="alert alert-success">
@@ -108,7 +120,7 @@
                    </form>
                </div>
            </div>
-           <div class="col-md-6">
+           <div class="col-md-8">
                <table class="table table-bordered">
                    <thead>
                    <tr>
@@ -116,7 +128,8 @@
                        <th>Name</th>
                        <th>Description</th>
                        <th>Upload By</th>
-                       <th colspan="2">Action</th>
+                       <th>Verify By</th>
+                       <th colspan="3">Action</th>
                    </tr>
                    </thead>
                    <tbody>
@@ -131,6 +144,12 @@
                                <td>{{ $course->name }}</td>
                                <td>{{ $course->description }}</td>
                                <td>{{ $course->teacher->name }}</td>
+                               <td title="@foreach($course->verifyBy as $t) {{ $t->teacher->name }}, @endforeach">{{ $course->verifyBy->count() }} Teacher</td>
+                                <td>
+                                    <a href="{{ route('panel.file.verify.create', [$panel->id, $course->id]) }}" class="">
+                                        verify
+                                    </a>
+                                </td>
                                <td>
                                    <a href="{{ route('panel.panelCourse.download', $course->id) }}" class="">
                                        <i class="fa fa-download"></i>
@@ -145,7 +164,7 @@
                        @endforeach
                    @else
                        <tr>
-                           <td colspan="5">No Course Found</td>
+                           <td colspan="5" class="text-center">No Course Found</td>
                        </tr>
                    @endif
                    </tbody>
