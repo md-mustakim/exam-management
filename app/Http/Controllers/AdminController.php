@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Panel;
 use App\Models\PanelCourse;
+use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -119,7 +120,11 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        return view('admin.adminDashboard');
+
+        return view('admin.adminDashboard', [
+            'panels' => Panel::all(),
+            'teachers' => Teacher::all()
+        ]);
     }
 
     public function panelIndex()

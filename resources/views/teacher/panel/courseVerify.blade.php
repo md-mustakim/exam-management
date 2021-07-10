@@ -76,9 +76,11 @@
                     </div>
                 </form>
             @else
-                <div class="d-flex justify-content-center ">
-                    <button class="btn btn-success">Verified <i class="fa fa-check-circle"></i></button>
-                </div>
+                @if(Auth::guard('teacher')->check())
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-success">Verified <i class="fa fa-check-circle"></i></button>
+                    </div>
+                @endif
             @endif
             <div class="">
                 <a href="{{ route('panel.show', $panel->id) }}" class="">Go Back</a>

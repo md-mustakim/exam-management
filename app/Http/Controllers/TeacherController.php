@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Panel;
+use App\Models\PanelMember;
 use App\Models\Teacher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -129,8 +131,12 @@ class TeacherController extends Controller
         return back()->with('message', 'invalid email or password');
     }
 
-    public function dashboard(Request $request)
+    public function dashboard()
     {
-        return view('teacher.teacherDashboard');
+        $id = Auth::guard('teacher')->id();
+        $panelList = Panel::all()->where('teacher_id', '=', $id);
+        $panelMember = PanelMember::all()->where('teacher_id', '=', $id);
+
+        return view('teacher.teacherDashboard', ['panels' => $panelList, 'memberOfPanel' => $panelMember]);
     }
 }
