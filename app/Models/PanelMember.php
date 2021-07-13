@@ -21,4 +21,9 @@ class PanelMember extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    public function panel(): BelongsTo
+    {
+        return $this->belongsTo(Panel::class);
+    }
 }

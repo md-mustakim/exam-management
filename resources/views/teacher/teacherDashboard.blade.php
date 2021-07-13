@@ -138,13 +138,22 @@
                                 <table class="table table-bordered">
                                     <thead>
                                     <tr>
-                                        <td>id</td>
+                                        <td>Panel Name</td>
+                                        <td>Admin</td>
+                                        <td>Started</td>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($memberOfPanel as $item)
                                         <tr>
-                                            <td>{{ $item->id }}</td>
+                                            <td>
+                                                <a href="{{ route('panel.show', $item->panel->id) }}" class="">
+                                                    {{ $item->panel->name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $item->panel->teacher->name }}</td>
+                                            <td title="{{ Carbon\Carbon::parse($item->panel->created_at)->format('D d-m-y h:i:s a') }}"
+                                            >{{ Carbon\Carbon::parse($item->panel->created_at)->diffForHumans() }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
